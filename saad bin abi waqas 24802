@@ -1,0 +1,226 @@
+Main.dart:
+import 'package:flutter/material.dart';
+import 'screen/product_list_screen.dart';
+import 'models/product_model.dart';
+import 'widgets/product_tile.dart';
+void main() {
+  runApp(MyApp());
+}
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Product Details App',
+      home: ProductListScreen(),
+    );
+  }
+}
+product_list_screen.dart:
+import 'package:flutter/material.dart';
+import 'package:productdetailsheet_app/widgets/product_tile.dart';
+import '../models/product_model.dart';
+import 'product_detail_screen.dart';
+class ProductListScreen extends StatelessWidget {
+  final List<Product> products = [
+    Product(
+      id: 1,
+      title: 'Power bank',
+      description: 'power_ON_THE_GO',
+      price: 29.99,
+      imageUrl:'https://images.philips.com/is/image/philipsconsumer/506144bc684c46e3a62fb0ce00a6d411?wid=700&hei=700',
+    ),
+    Product(
+      id: 2,
+      title: 'Phone Case',
+      description: 'protect your device in style',
+      price: 19.99,
+      imageUrl: 'https://www.southparkshop.com/cdn/shop/files/SP-NSFW-MONEY-101681-iphone-12-pro-front-MF_800x.png?v=1702235966',
+    ),
+    Product(
+      id: 3,
+      title: 'SmartWatch Pro',
+      description: 'SMART_STYLE',
+      price: 96.99,
+      imageUrl: 'https://picsum.photos/200/300?grayscale&seed=smart-watch-pro',
+    ),
+    Product(
+      id: 4,
+      title: 'Bicycle wheel',
+      description: 'RIDE IN FREEDOM ',
+      price: 49.99,
+      imageUrl: 'https://picsum.photos/200/301?grayscale&seed=bicycle-wheel',
+    ),
+  ];
+  @override
+  Widget build(BuildContext context) {
+  return Scaffold(
+  appBar: AppBar(title: Text('Product List')),
+  body: ListView.builder(
+  itemCount: products.length,
+  itemBuilder: (context, index) {
+  return ListTile(
+  title: Text(products[index].title),
+  subtitle: Text(products[index].description),
+  trailing: Text('\$${products[index].price}'),
+  onTap: () {
+  Navigator.push(
+  context,
+  MaterialPageRoute(
+  builder: (context) => ProductDetailScreen(
+  product: products[index],
+  ),
+  ),
+  );
+  },
+  );
+  },
+  ),
+  );
+  }
+  }
+product_model.dart:
+class Product {
+  final int id;
+  final String title;
+  final String description;
+  final double price;
+  final String imageUrl;
+  Product({required this.id, required this.title, required this.description, required this.price, required this.imageUrl});
+}
+   
+product_tile.dart:
+import 'package:flutter/material.dart';
+import '../models/product_model.dart';
+class ProductTile extends StatelessWidget {
+  final Product product;
+  ProductTile({required this.product});
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        children: [
+          // Image
+          Container(
+            height: 100,
+            width: double.infinity,
+            child: Image.network(product.imageUrl),
+          ),
+          // Title
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              product.title,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          // Price
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('\$${product.price}'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+product_detail_screen.dart:
+import 'package:flutter/material.dart';
+import 'package:productdetailsheet_app/models/product_model.dart';
+class ProductDetailScreen extends StatelessWidget {
+  final Product? product;
+  ProductDetailScreen({this.product});
+  @override
+  Widget build(BuildContext context) {
+    if (product == null) {
+      return Scaffold(
+        appBar: AppBar(title: Text('Product Details')),
+        body: Center(
+          child: Text('No product selected'),
+        ),
+      );
+    }
+    return Scaffold(
+      appBar: AppBar(title: Text('Product Details')),
+      body: Column(
+        children: [
+          // Image
+          Container(
+            height: 200,
+            width: double.infinity,
+            child: Image.network(product!.imageUrl),
+          ),
+          // Title
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              product!.title,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
+          // Description
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(product!.description),
+          ),
+          // Price
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text('\$${product!.price}'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+button.dart:
+import 'package:flutter/material.dart';
+class CustomButton extends StatelessWidget {
+  final String? text;
+  final VoidCallback? onPressed;
+  CustomButton({this.text, this.onPressed});
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.blue), // button color
+        foregroundColor: MaterialStateProperty.all(Colors.white), // text color
+      ),
+      child: Text(text ?? ''),
+      onPressed: onPressed,
+    );
+  }
+}
+product_data.dart:
+import 'product_model.dart';
+class ProductData {
+  static List<Product> products = [
+    Product(
+      id: 1,
+      title: 'SmartWatch Pro',
+      description: 'Stay connected and on top of your fitness goals with our latest SmartWatch Pro. Featuring a sleek design, heart rate monitoring, and GPS tracking, this smartwatch is perfect for anyone looking to upgrade their fitness routine.',
+      price: 96.99,
+      imageUrl: 'https://picsum.photos/200/300',
+    ),
+    Product(
+      id: 2,
+      title: 'bicycle',
+      description: '. On a standard bicycle the wheels are mounted in-line in a metal frame, with the front wheel held in a rotatable fork. ',
+      price: 49.99,
+      imageUrl: 'https://picsum.photos/200/301',
+    ),
+    Product(
+      id: 3,
+      title: 'Power bank',
+      description: 'Stay charged on-the-go with our high-capacity Power Bank. Featuring multiple USB ports and a compact design, this power bank is perfect for travelers and heavy phone users.',
+      price: 29.99,
+      imageUrl:'https://images.philips.com/is/image/philipsconsumer/506144bc684c46e3a62fb0ce00a6d411?wid=700&hei=700',
+    ),
+    Product(
+      id: 4,
+      title: 'Phone Case',
+      description: 'Protect your phone in style with our durable Phone Case. Featuring a sleek design and precise cutouts, this phone case is perfect for anyone looking to add some personality to their phone.',
+      price: 19.99,
+      imageUrl: 'https://www.southparkshop.com/cdn/shop/files/SP-NSFW-MONEY-101681-iphone-12-pro-front-MF_800x.png?v=1702235966',
+    ),
+  ];
+}
